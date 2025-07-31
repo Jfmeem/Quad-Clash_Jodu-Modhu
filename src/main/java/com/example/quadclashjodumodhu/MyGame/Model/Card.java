@@ -1,4 +1,4 @@
-package MyGame.Model;
+package com.example.quadclashjodumodhu.MyGame.Model;
 
 public class Card {
     public enum Suits{
@@ -12,7 +12,7 @@ public class Card {
         this.imagePath = imagePath;
 
     }
-
+    
     public Suits getSuit(){
         return suit;
     }
