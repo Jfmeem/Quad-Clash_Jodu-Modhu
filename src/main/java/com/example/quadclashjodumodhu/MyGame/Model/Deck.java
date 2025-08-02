@@ -5,13 +5,13 @@ import java.util.List;
 public class Deck {
     private final List<Card>cards;
     public Deck(){
-        cards=new ArrayList<>();
+        this.cards=new ArrayList<>();
         initializeDeck();
     }
     private void initializeDeck(){
         for (Card.Suits suit : Card.Suits.values()){
             for (int i=0;i<4;i++){
-                String imagePath="/images/cards"+suit.name().toLowerCase() +"_"+(i+1) +" .pnj";
+                String imagePath="/images/cards"+suit.name().toLowerCase() +"_"+(i+1) +" .jpg";
                 cards.add(new Card(suit,imagePath));
             }
         }

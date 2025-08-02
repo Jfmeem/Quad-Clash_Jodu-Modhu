@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 public class CardLoader {
     private static final String CARD_IMAGE_BASE = "/images/cards/";
-    private static final String CARD_BACK_IMAGE = "/images/card_back.png";
-    private final Map<String, Image> imageCache = new HashMap<>();
+    private static final String CARD_BACK_IMAGE = "/images/card_back.jpg";
+    private static final Map<String, Image> imageCache = new HashMap<>();
 
     public CardLoader() {
         loadCardBack();
@@ -25,7 +25,7 @@ public class CardLoader {
         String key = card.getSuit().name() + "_" + card.hashCode();
         if (!imageCache.containsKey(key)) {
             String imagePath = CARD_IMAGE_BASE + card.getSuit().name().toLowerCase() +
-                    "_" + (Math.abs(card.hashCode()) % 4 + 1) + ".png";
+                    "_" + (Math.abs(card.hashCode()) % 4 + 1) + ".jpg";
             try {
                 Image image = new Image(getClass().getResourceAsStream(imagePath));
                 imageCache.put(key, image);
@@ -37,7 +37,7 @@ public class CardLoader {
         return imageCache.get(key);
     }
 
-    public Image getCardBackImage() {
+    public static Image getCardBackImage() {
         return imageCache.get("back");
     }
 }

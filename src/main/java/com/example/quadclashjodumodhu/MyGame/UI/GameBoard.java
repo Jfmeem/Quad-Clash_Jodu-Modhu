@@ -1,8 +1,11 @@
 package com.example.quadclashjodumodhu.MyGame.UI;
 
+import com.example.quadclashjodumodhu.MyGame.Model.BotPlayer;
+import com.example.quadclashjodumodhu.MyGame.Model.Card;
 import com.example.quadclashjodumodhu.MyGame.Model.Player;
 import com.example.quadclashjodumodhu.MyGame.Core.Game;
 import com.example.quadclashjodumodhu.MyGame.Util.CardLoader;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 
 public class GameBoard extends BorderPane {
     private final Game game;
@@ -75,6 +79,22 @@ public class GameBoard extends BorderPane {
 
         aiHands[2] = createAIPlayerArea(game.getPlayers().get(3), "right");
         gameArea.add(aiHands[2], 2, 1);
+    }
+    private void playAITurn() {
+        if (game.getCurrentPlayer() instanceof BotPlayer) {
+            Card card = game.getCurrentPlayer().chooseCardToPlay();
+            boolean gameOver = game.playTurn(card);
+            updateGameView();
+
+            if (!gameOver) {
+                // Schedule next AI turn if needed
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(e -> playAITurn());
+                pause.play();
+            } else {
+                statusLabel.setText(game.getWinner().getName() + " wins!");
+            }
+        }
     }
 
     private VBox createAIPlayerArea(Player player, String position) {
@@ -149,12 +169,15 @@ public class GameBoard extends BorderPane {
                 .filter(node -> ((CardView) node).isSelected())
                 .findFirst()
                 .ifPresent(cardNode -> {
-                    game.playTurn(((CardView) cardNode).getCard());
+                    boolean gameOver=game.playTurn(((CardView) cardNode).getCard());
                     updateGameView();
 
-                    if (game.checkWinCondition()) {
+                    if (gameOver) {
                         statusLabel.setText(game.getWinner().getName() + " wins!");
                         playButton.setDisable(true);
+                    }
+                    else{
+                        playAITurn();
                     }
                 });
     }

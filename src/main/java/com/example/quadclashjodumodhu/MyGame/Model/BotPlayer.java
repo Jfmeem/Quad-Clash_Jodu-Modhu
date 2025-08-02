@@ -1,9 +1,10 @@
 package com.example.quadclashjodumodhu.MyGame.Model;
 import java.util.Random;
 public class BotPlayer extends Player {
-    private final Random random=new Random();
+    private final Random random;
     public BotPlayer(String name){
         super(name);
+        this.random=new Random();
     }
     @Override
     public Card chooseCardToPlay(){

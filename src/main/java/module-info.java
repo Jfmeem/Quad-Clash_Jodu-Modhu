@@ -1,12 +1,10 @@
 module com.example.quadclashjodumodhu {
-    requires transitive javafx.controls;
-    requires transitive javafx.fxml;
-
-    requires org.controlsfx.controls;
-    requires com.dlsc.formsfx;
-    requires org.kordamp.ikonli.javafx;
+    requires javafx.controls;
+    requires javafx.fxml;
 
     opens com.example.quadclashjodumodhu to javafx.fxml;
+    opens com.example.quadclashjodumodhu.MyGame.UI to javafx.fxml;
 
     exports com.example.quadclashjodumodhu;
+    exports com.example.quadclashjodumodhu.MyGame.UI;
 }

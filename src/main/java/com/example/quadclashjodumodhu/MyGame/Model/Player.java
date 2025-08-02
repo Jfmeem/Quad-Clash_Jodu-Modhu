@@ -19,6 +19,9 @@ public abstract class Player {
     public void addCard(Card card){
         hand.add(card);
     }
+    public void playCard(Card card){
+        hand.remove(card);
+    }
     public void PlayCard(Card card){
         hand.remove(card);
     }
@@ -31,5 +34,5 @@ public abstract class Player {
 
     public abstract Card chooseCardToPlay();
 
-    public abstract void playCard(Card card);
+   // public abstract void playCard(Card card);
 }

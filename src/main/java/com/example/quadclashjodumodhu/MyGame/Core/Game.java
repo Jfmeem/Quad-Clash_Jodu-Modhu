@@ -4,6 +4,12 @@ import com.example.quadclashjodumodhu.MyGame.Model.*;
 import java.util.ArrayList;
 import java.util.List;
 public class Game {
+    private boolean gameOver;
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
     private final List<Player>players;
     private final Deck deck;
     private int currentPlayerIndex;
@@ -13,11 +19,12 @@ public class Game {
         initializeGame();
     }
     private void initializeGame(){
+        deck.shuffle();
         players.add(new HumanPlayer("you"));
         players.add(new BotPlayer("Bot 1"));
         players.add(new BotPlayer("Bot 2"));
         players.add(new BotPlayer("Bot 3"));
-        deck.shuffle();
+        //deck.shuffle();
         dealCards();
         currentPlayerIndex=0;
     }
@@ -37,15 +44,19 @@ public class Game {
         return currentPlayerIndex;
     }
 
-    public void playTurn(Card card){
+    public boolean playTurn(Card card){
+        if(gameOver)return true;
         Player currentPlayer=getCurrentPlayer();
         currentPlayer.playCard(card);
-        if(checkWinCondition()){
-            //handle win
-            return;
+        if(currentPlayer.hasWinningHand()){
+            //Player winner = currentPlayer;
+            gameOver=true;
+            return true;
         }
         nextPlayer();
+        return false;
     }
+
     private void nextPlayer(){
         currentPlayerIndex=(currentPlayerIndex+1)%players.size();
     }
@@ -61,4 +72,8 @@ public class Game {
     public List<Player>getPlayers(){
         return new ArrayList<>(players);
     }
+
+//    public boolean isGameOver() {
+//        return false;
+//    }
 }

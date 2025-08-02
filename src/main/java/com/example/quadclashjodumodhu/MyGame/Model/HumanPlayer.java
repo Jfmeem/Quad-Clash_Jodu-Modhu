@@ -6,6 +6,7 @@ public class HumanPlayer extends Player {
     }
     @Override
     public Card chooseCardToPlay(){
-        return null;
+        //return null;
+        throw new UnsupportedOperationException("Human player cards are selected via UI");
     }
 }
