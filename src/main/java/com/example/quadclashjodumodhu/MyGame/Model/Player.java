@@ -30,4 +30,6 @@ public abstract class Player {
     }
 
     public abstract Card chooseCardToPlay();
+
+    public abstract void playCard(Card card);
 }
