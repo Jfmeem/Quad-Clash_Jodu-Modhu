@@ -1,26 +1,17 @@
 package com.example.quadclashjodumodhu.MyGame.Model;
 
 public class Card {
-    public enum Suits{
-        DevilQueen, Emberlore, Valora, WhispersOfWings
+    public enum Suit {
+        DEVIL_QUEEN, EMBERLORE, VALORA, WHISPERS_OF_WINGS
     }
-    private final Suits suit;
-    private final String imagePath;
 
-    public Card(Suits suit, String imagePath){
+    private final Suit suit;
+
+    public Card(Suit suit) {
         this.suit = suit;
-        this.imagePath = imagePath;
-
     }
-    
-    public Suits getSuit(){
+
+    public Suit getSuit() {
         return suit;
-    }
-    public String getImagePath(){
-        return imagePath;
-    }
-
-    public String toString(){
-        return "Card {suit = " + suit + ", imagePath = ' " + imagePath  + "}";
     }
 }

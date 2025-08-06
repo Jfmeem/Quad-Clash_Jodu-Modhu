@@ -1,6 +1,7 @@
 module com.example.quadclashjodumodhu {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
     opens com.example.quadclashjodumodhu to javafx.fxml;
     opens com.example.quadclashjodumodhu.MyGame.UI to javafx.fxml;
