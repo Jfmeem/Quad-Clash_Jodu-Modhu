@@ -51,7 +51,7 @@ public class GameBoard extends BorderPane {
 
 
         playButton = new Button("Play Card");
-        playButton.setDisable(true);
+        playButton.setDisable(false);
         playButton.setOnAction(e -> playSelectedCard());
 
         VBox humanArea = new VBox(15, new Label("Your Hand"), humanHand, playButton);
@@ -81,7 +81,7 @@ public class GameBoard extends BorderPane {
         gameArea.add(aiHands[2], 2, 1);
     }
     private void playAITurn() {
-        if (game.getCurrentPlayer() instanceof BotPlayer) {
+        if (game.getCurrentPlayer() instanceof BotPlayer bot) {
             Card card = game.getCurrentPlayer().chooseCardToPlay();
             boolean gameOver = game.playTurn(card);
             updateGameView();
@@ -174,11 +174,12 @@ public class GameBoard extends BorderPane {
 
                     if (gameOver) {
                         statusLabel.setText(game.getWinner().getName() + " wins!");
-                        playButton.setDisable(true);
+                        playButton.setDisable(false);
                     }
                     else{
                         playAITurn();
                     }
                 });
     }
+
 }

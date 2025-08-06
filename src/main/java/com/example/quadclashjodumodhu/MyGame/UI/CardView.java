@@ -2,6 +2,7 @@ package com.example.quadclashjodumodhu.MyGame.UI;
 
 import com.example.quadclashjodumodhu.MyGame.Model.Card;
 import com.example.quadclashjodumodhu.MyGame.Util.CardLoader;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
@@ -9,15 +10,25 @@ public class CardView extends StackPane {
     private final Card card;
     private final ImageView imageView;
     private boolean isSelected;
+    private final Button cardButton;
 
 
     public CardView(Card card, CardLoader cardLoader) {
         this.card = card;
+        this.isSelected=false;
         this.imageView = new ImageView(cardLoader.loadCardImage(card));
         imageView.setFitWidth(100);
         imageView.setFitHeight(140);
+        imageView.setPreserveRatio(true);
+        cardButton = new Button();
+        cardButton.setGraphic(imageView);
+        cardButton.setStyle("-fx-background-color: transparent; -fx-padding: 0;");
+        cardButton.setOnAction(e -> toggleSelection());
 
-        getChildren().add(imageView);
+
+        getChildren().add(cardButton);
+        setPrefSize(110, 150);
+        updateStyle();
 //        setStyle("-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 1);");
     }
     private void updateStyle() {

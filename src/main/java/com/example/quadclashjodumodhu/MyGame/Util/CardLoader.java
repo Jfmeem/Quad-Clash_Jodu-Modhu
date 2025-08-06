@@ -1,6 +1,6 @@
 package com.example.quadclashjodumodhu.MyGame.Util;
 
-import com.example.quadclashjodumodhu.HelloApplication;
+//import com.example.quadclashjodumodhu.HelloApplication;
 import com.example.quadclashjodumodhu.MyGame.Model.Card;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,15 +8,16 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
+//import java.awt.*;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+//import java.util.Objects;
 
 public class CardLoader {
     private static final String RESOURCE_PATH = "file:D:\\nabila\\java_project\\Quad-Clash_Jodu-Modhu\\src\\main\\resources\\Suits";
-    private final Map<String, Image> imageCache = new HashMap<>();
+    private static final Map<String, Image> imageCache = new HashMap<>();
     private static final String CARD_BACK_IMAGE = "/images/card_back.jpg";
 
     public CardLoader() {
@@ -50,7 +51,7 @@ public class CardLoader {
     }
 
     private void loadCardBack() {
-        String backImagePath = RESOURCE_PATH + "card_back.jpg";
+        String backImagePath ="card_back.jpg";
         try (InputStream is = getClass().getResourceAsStream(backImagePath)) {
             if (is != null) {
                 Image backImage = new Image(is);
@@ -62,6 +63,8 @@ public class CardLoader {
             System.err.println("Error loading card back: " + e.getMessage());
         }
     }
+
+
 
     private Image createPlaceholderImage(Card.Suit suit) {
         WritableImage img = new WritableImage(100, 140);
@@ -81,8 +84,8 @@ public class CardLoader {
         return img;
     }
 
-    public Image getCardBackImage() {
-        return imageCache.getOrDefault("back", createDefaultBackImage());
+    public static Image getCardBackImage() {
+        return imageCache.get("back");
     }
 
     private Image createDefaultBackImage() {

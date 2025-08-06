@@ -33,7 +33,7 @@ public class Game {
 
     public boolean playTurn(Card card) {
         Player current = getCurrentPlayer();
-        current.playCard(card);
+        current.playCard();
 
         if (!deck.isEmpty()) {
             current.addCard(deck.drawCard());
@@ -46,6 +46,8 @@ public class Game {
         nextPlayer();
         return false;
     }
+
+
 
     private void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -66,4 +68,22 @@ public class Game {
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
     }
+
+//    public boolean playTurn(Card cardToPass) {
+//        Player currentPlayer = getCurrentPlayer();
+//
+//
+//        currentPlayer.removeCard(cardToPass);
+//        nextplayer.addCard(cardToPass);
+//
+//        for (Player player : players) {
+//            if (player.hasWinningHand()) {
+//                winner = player;
+//                return true; // Game over
+//            }
+//        }
+//
+//        nextPlayer();
+//        return false;
+//    }
 }
