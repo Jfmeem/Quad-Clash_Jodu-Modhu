@@ -2,7 +2,7 @@ package com.example.quadclashjodumodhu.MyGame.Model;
 
 public class Card {
     public enum Suit {
-        DEVIL_QUEEN, EMBERLORE, VALORA, WHISPERS_OF_WINGS
+        DEVILQUEEN, EMBERLORE, VALORA, WHISPERSOFWINGS
     }
 
     private final Suit suit;

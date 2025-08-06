@@ -31,7 +31,7 @@ public class Game {
         }
     }
 
-    public void playTurn(Card card) {
+    public boolean playTurn(Card card) {
         Player current = getCurrentPlayer();
         current.playCard(card);
 
@@ -44,6 +44,7 @@ public class Game {
         }
 
         nextPlayer();
+        return false;
     }
 
     private void nextPlayer() {

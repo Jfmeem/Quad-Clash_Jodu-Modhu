@@ -1,5 +1,6 @@
 package com.example.quadclashjodumodhu.MyGame.Util;
 
+import com.example.quadclashjodumodhu.HelloApplication;
 import com.example.quadclashjodumodhu.MyGame.Model.Card;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,36 +12,41 @@ import java.awt.*;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CardLoader {
     private static final String RESOURCE_PATH = "file:D:\\nabila\\java_project\\Quad-Clash_Jodu-Modhu\\src\\main\\resources\\Suits";
     private final Map<String, Image> imageCache = new HashMap<>();
+    private static final String CARD_BACK_IMAGE = "/images/card_back.jpg";
 
     public CardLoader() {
         loadCardBack();
     }
 
-    public Image loadCardImage(Card card) {
-        String imageName = card.getSuit().name().toLowerCase() + ".jpg";
-        String imagePath = RESOURCE_PATH + "\\" + imageName;
 
-        if (!imageCache.containsKey(imagePath)) {
+    public Image loadCardImage(Card card) {
+        String imageName_val = card.getSuit().name().toLowerCase() + ".jpg";
+//        String imagePath_val = RESOURCE_PATH + "\\" + imageName_val;
+
+        if (!imageCache.containsKey(imageName_val)) {
             try  {
 //                (InputStream is = getClass().getResourceAsStream(imagePath))
-                if (true) {
-                    Image image = new Image(getClass().getResource("Suits/" + imageName).toExternalForm(), 100, 140, true, true);
-                    imageCache.put(imagePath, image);
+//                if (true) {
+                    String a = "file:./images/" + imageName_val;
+                    System.out.println(a);
+                    Image image = new Image(a, 100, 140, true, true);
+                    imageCache.put(imageName_val, image);
                     System.out.println(new ImageView(image).getX());
-                } else {
-                    System.err.println("Image not found--: " + imagePath);
-                    return createPlaceholderImage(card.getSuit());
-                }
+//                } else {
+//                    System.err.println("Image not found--: " + imagePath);
+//                    return createPlaceholderImage(card.getSuit());
+//                }
             } catch (Exception e) {
                 System.err.println("Error loading image: " + e.getMessage());
                 return createPlaceholderImage(card.getSuit());
             }
         }
-        return imageCache.get(imagePath);
+        return imageCache.get(imageName_val);
     }
 
     private void loadCardBack() {
@@ -61,10 +67,10 @@ public class CardLoader {
         WritableImage img = new WritableImage(100, 140);
         PixelWriter pw = img.getPixelWriter();
         Color color = switch(suit) {
-            case DEVIL_QUEEN -> Color.RED;
+            case DEVILQUEEN -> Color.RED;
             case EMBERLORE -> Color.BLUE;
             case VALORA -> Color.GREEN;
-            case WHISPERS_OF_WINGS -> Color.PURPLE;
+            case WHISPERSOFWINGS -> Color.PURPLE;
         };
 
         for (int y = 0; y < 140; y++) {
