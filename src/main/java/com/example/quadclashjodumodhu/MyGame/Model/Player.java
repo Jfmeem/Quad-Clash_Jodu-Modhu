@@ -41,17 +41,14 @@ public abstract class Player {
             return false;
         }
 
-        // Count cards by suit
         Map<Card.Suit, Integer> suitCounts = new HashMap<>();
         for (Card card : hand) {
             suitCounts.put(card.getSuit(), suitCounts.getOrDefault(card.getSuit(), 0) + 1);
         }
 
-        // Check if any suit has 4 cards
-        for (int count : suitCounts.values()) {
-            if (count == 4) {
-                System.out.println("🏆 " + name + " has winning hand: 4 " +
-                        getWinningSuit() + " cards!");
+        for (Map.Entry<Card.Suit, Integer> entry : suitCounts.entrySet()) {
+            if (entry.getValue() == 4) {
+                System.out.println("🏆 " + name + " has winning hand: 4 " + entry.getKey() + " cards!");
                 return true;
             }
         }
@@ -60,8 +57,6 @@ public abstract class Player {
     }
 
     public Card.Suit getWinningSuit() {
-        if (!hasWinningHand()) return null;
-
         Map<Card.Suit, Integer> suitCounts = new HashMap<>();
         for (Card card : hand) {
             suitCounts.put(card.getSuit(), suitCounts.getOrDefault(card.getSuit(), 0) + 1);
