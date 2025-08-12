@@ -10,49 +10,153 @@ public class Game {
     private final Deck deck = new Deck();
     private int currentPlayerIndex = 0;
     private Player winner;
+    private int turnCount = 0;
 
     public Game() {
         initializePlayers();
-        dealCards();
+        dealInitialCards();
+        printGameStart();
     }
 
     private void initializePlayers() {
-        players.add(new HumanPlayer());
+        players.add(new HumanPlayer("You"));
         players.add(new BotPlayer("Bot 1"));
         players.add(new BotPlayer("Bot 2"));
         players.add(new BotPlayer("Bot 3"));
+
+        System.out.println("=== QUAD CLASH: JODU-MODHU ===");
+        System.out.println("Players initialized: " + players.size());
+        for (Player player : players) {
+            System.out.println("- " + player.getName());
+        }
     }
 
-    private void dealCards() {
-        for (int i = 0; i < 4; i++) {
+    private void dealInitialCards() {
+        System.out.println("\n--- Dealing Cards ---");
+        for (int cardNumber = 1; cardNumber <= 4; cardNumber++) {
             for (Player player : players) {
-                player.addCard(deck.drawCard());
+                Card dealtCard = deck.drawCard();
+                if (dealtCard != null) {
+                    player.addCard(dealtCard);
+                }
+            }
+        }
+
+        // Verify distribution
+        System.out.println("Card distribution complete:");
+        for (Player player : players) {
+            System.out.println(player.getName() + ": " + player.getHandSize() + " cards");
+        }
+        System.out.println("Remaining deck size: " + deck.size());
+    }
+
+    public boolean playTurn(Card selectedCard) {
+        turnCount++;
+        Player currentPlayer = getCurrentPlayer();
+        Player nextPlayer = getNextPlayer();
+
+        System.out.println("\n=== TURN " + turnCount + " ===");
+        System.out.println("Current Player: " + currentPlayer.getName() + " (" + currentPlayer.getHandSize() + " cards)");
+        System.out.println("Next Player: " + nextPlayer.getName() + " (" + nextPlayer.getHandSize() + " cards)");
+
+        Card cardToPass = null;
+
+        // Handle card selection based on player type
+        if (currentPlayer instanceof HumanPlayer) {
+            if (selectedCard != null && currentPlayer.hasCard(selectedCard)) {
+                cardToPass = selectedCard;
+                currentPlayer.removeCard(cardToPass);
+                System.out.println("✓ " + currentPlayer.getName() + " selected: " + cardToPass.getSuit());
+            } else {
+                System.err.println(" Invalid card selection!");
+                return false;
+            }
+        } else {
+            // AI player chooses card automatically
+            cardToPass = currentPlayer.playCard();
+            System.out.println("* " + currentPlayer.getName() + " played: " +
+                    (cardToPass != null ? cardToPass.getSuit() : "null"));
+        }
+
+        // Pass card to next player
+        if (cardToPass != null) {
+            nextPlayer.addCard(cardToPass);
+            System.out.println("➡ " + currentPlayer.getName() + " passed " +
+                    cardToPass.getSuit() + " to " + nextPlayer.getName());
+
+            // Show hand sizes after transfer
+            System.out.println("After turn: " + currentPlayer.getName() + "(" +
+                    currentPlayer.getHandSize() + ") → " +
+                    nextPlayer.getName() + "(" + nextPlayer.getHandSize() + ")");
+        }
+
+        // Check win condition for all players
+        checkWinConditions();
+
+        if (winner == null) {
+            // Move to next player's turn
+            nextPlayer();
+            return false; // Game continues
+        } else {
+            System.out.println("\n GAME OVER! Winner: " + winner.getName() );
+            printFinalStatus();
+            return true; // Game ended
+        }
+    }
+
+
+    private void checkWinConditions() {
+        for (Player player : players) {
+            if (player.hasWinningHand()) {
+                winner = player;
+                System.out.println("* " + player.getName() + " has winning hand!");
+                System.out.print("Winning cards: ");
+                for (Card card : player.getHand()) {
+                    System.out.print(card.getSuit() + " ");
+                }
+                System.out.println();
+                break;
             }
         }
     }
 
-    public boolean playTurn(Card card) {
-        Player current = getCurrentPlayer();
-        current.playCard();
-
-        if (!deck.isEmpty()) {
-            current.addCard(deck.drawCard());
-        }
-
-        if (current.hasWinningHand()) {
-            winner = current;
-        }
-
-        nextPlayer();
-        return false;
-    }
-
-
 
     private void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        System.out.println("⏭ Next turn: " + getCurrentPlayer().getName());
     }
 
+    private Player getNextPlayer() {
+        int nextIndex = (currentPlayerIndex + 1) % players.size();
+        return players.get(nextIndex);
+    }
+
+    private void printGameStart() {
+        System.out.println("\n GAME STARTED! ");
+        System.out.println("Goal: Collect 4 cards of the same suit");
+        System.out.println("Turn Order: " + players.get(0).getName() + " → " +
+                players.get(1).getName() + " → " +
+                players.get(2).getName() + " → " +
+                players.get(3).getName());
+        System.out.println("First turn: " + getCurrentPlayer().getName());
+    }
+
+    private void printFinalStatus() {
+        System.out.println("\n=== FINAL STATUS ===");
+        for (Player player : players) {
+            System.out.print(player.getName() + " (" + player.getHandSize() + "): ");
+            for (Card card : player.getHand()) {
+                System.out.print(card.getSuit() + " ");
+            }
+            if (player.hasWinningHand()) {
+                System.out.print(" WINNER!");
+            }
+            System.out.println();
+        }
+        System.out.println("Total turns played: " + turnCount);
+    }
+
+    // Getter methods
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
@@ -69,21 +173,7 @@ public class Game {
         return new ArrayList<>(players);
     }
 
-//    public boolean playTurn(Card cardToPass) {
-//        Player currentPlayer = getCurrentPlayer();
-//
-//
-//        currentPlayer.removeCard(cardToPass);
-//        nextplayer.addCard(cardToPass);
-//
-//        for (Player player : players) {
-//            if (player.hasWinningHand()) {
-//                winner = player;
-//                return true; // Game over
-//            }
-//        }
-//
-//        nextPlayer();
-//        return false;
-//    }
+    public int getTurnCount() {
+        return turnCount;
+    }
 }

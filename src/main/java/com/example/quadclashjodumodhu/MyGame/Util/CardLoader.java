@@ -50,19 +50,34 @@ public class CardLoader {
         return imageCache.get(imageName_val);
     }
 
-    private void loadCardBack() {
-        String backImagePath ="card_back.jpg";
-        try (InputStream is = getClass().getResourceAsStream(backImagePath)) {
-            if (is != null) {
-                Image backImage = new Image(is);
-                imageCache.put("back", backImage);
-            } else {
-                System.err.println("Card back image not found at: " + backImagePath);
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading card back: " + e.getMessage());
+//    private void loadCardBack() {
+//        String backImagePath ="card_back.jpg";
+//        try (InputStream is = getClass().getResourceAsStream(backImagePath)) {
+//            if (is != null) {
+//                Image backImage = new Image(is);
+//                imageCache.put("back", backImage);
+//            } else {
+//                System.err.println("Card back image not found at: " + backImagePath);
+//            }
+//        } catch (Exception e) {
+//            System.err.println("Error loading card back: " + e.getMessage());
+//        }
+//    }
+private void loadCardBack() {
+
+    String backImagePath = "/images/card_back.jpg";
+    try (InputStream is = getClass().getResourceAsStream(backImagePath)) {
+        if (is != null) {
+            Image backImage = new Image(is, 100, 140, true, true);
+            imageCache.put("back", backImage);
+        } else {
+            System.err.println("Card back image not found at: " + backImagePath);
         }
+    } catch (Exception e) {
+        System.err.println("Error loading card back: " + e.getMessage());
     }
+}
+
 
 
 
@@ -74,6 +89,7 @@ public class CardLoader {
             case EMBERLORE -> Color.BLUE;
             case VALORA -> Color.GREEN;
             case WHISPERSOFWINGS -> Color.PURPLE;
+
         };
 
         for (int y = 0; y < 140; y++) {
