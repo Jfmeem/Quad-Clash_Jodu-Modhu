@@ -18,7 +18,7 @@ import java.util.Map;
 public class CardLoader {
     private static final String RESOURCE_PATH = "file:D:\\nabila\\java_project\\Quad-Clash_Jodu-Modhu\\src\\main\\resources\\Suits";
     private static final Map<String, Image> imageCache = new HashMap<>();
-    private static final String CARD_BACK_IMAGE = "/images/card_back.jpg";
+    //private static final String CARD_BACK_IMAGE = "/images/card_back.jpg";
 
     public CardLoader() {
         loadCardBack();
@@ -63,20 +63,37 @@ public class CardLoader {
 //            System.err.println("Error loading card back: " + e.getMessage());
 //        }
 //    }
+//private void loadCardBack() {
+//
+//    String backImagePath = "file:./images/card_back.jpg";
+//    try (InputStream is = getClass().getResourceAsStream(backImagePath)) {
+//        if (is != null) {
+//            Image backImage = new Image(is, 100, 140, true, true);
+//            imageCache.put("back", backImage);
+//        } else {
+//            System.err.println("Card back image not found at: " + backImagePath);
+//        }
+//    } catch (Exception e) {
+//        System.err.println("Error loading card back: " + e.getMessage());
+//    }
+//}
 private void loadCardBack() {
+    String backImagePath = "file:./images/card_back.jpg";
 
-    String backImagePath = "/images/card_back.jpg";
-    try (InputStream is = getClass().getResourceAsStream(backImagePath)) {
-        if (is != null) {
-            Image backImage = new Image(is, 100, 140, true, true);
+    if (!imageCache.containsKey("back")) {
+        try {
+            Image backImage = new Image(backImagePath, 100, 140, true, true);
             imageCache.put("back", backImage);
-        } else {
-            System.err.println("Card back image not found at: " + backImagePath);
+            System.out.println("Card back loaded from: " + backImagePath);
+        } catch (Exception e) {
+            System.err.println("Error loading card back: " + e.getMessage());
+            // Create default back image if loading fails
+            Image defaultBack = createDefaultBackImage();
+            imageCache.put("back", defaultBack);
         }
-    } catch (Exception e) {
-        System.err.println("Error loading card back: " + e.getMessage());
     }
 }
+
 
 
 

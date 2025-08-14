@@ -6,9 +6,9 @@ public class BotPlayer extends Player {
     private final Random random = new Random();
     private final String strategy;
 
-    // AI Strategy types
+    // AI Strategy types (Defensive বাদ, Smart দুইবার)
     private static final String[] STRATEGIES = {
-            "SMART", "AGGRESSIVE", "DEFENSIVE"
+            "SMART", "SMART", "AGGRESSIVE"
     };
 
     public BotPlayer(String name) {
@@ -29,7 +29,6 @@ public class BotPlayer extends Player {
         switch (strategy) {
             case "SMART" -> chosenCard = chooseSmartCard();
             case "AGGRESSIVE" -> chosenCard = chooseAggressiveCard();
-            case "DEFENSIVE" -> chosenCard = chooseDefensiveCard();
             default -> chosenCard = chooseRandomCard();
         }
 
@@ -52,8 +51,7 @@ public class BotPlayer extends Player {
         // Never give away if we have 4 of same suit (winning hand)
         for (Card.Suit suit : Card.Suit.values()) {
             if (analysis.getOrDefault(suit, 0) == 4) {
-                // We're winning! Don't give away winning cards
-                // Find a different suit to give away
+                // Find different suit to give away
                 for (Card card : hand) {
                     if (!card.getSuit().equals(suit)) {
                         return card;
@@ -62,7 +60,7 @@ public class BotPlayer extends Player {
             }
         }
 
-        // Don't give away if we have 3 of same suit (close to winning)
+        // Avoid suits with 3 or more cards
         Set<Card.Suit> avoidSuits = new HashSet<>();
         for (Map.Entry<Card.Suit, Integer> entry : analysis.entrySet()) {
             if (entry.getValue() >= 3) {
@@ -81,7 +79,6 @@ public class BotPlayer extends Player {
             }
         }
 
-        // Give away card from least common suit
         if (targetSuit != null) {
             for (Card card : hand) {
                 if (card.getSuit().equals(targetSuit)) {
@@ -90,7 +87,6 @@ public class BotPlayer extends Player {
             }
         }
 
-        // Fallback to first non-winning card
         return hand.get(0);
     }
 
@@ -98,44 +94,14 @@ public class BotPlayer extends Player {
         Map<Card.Suit, Integer> analysis = getHandAnalysis();
         List<Card> hand = getHand();
 
-        // If we have 2+ of any suit, keep those and give away singletons
+        // Give away singletons first
         for (Card card : hand) {
-            int suitCount = analysis.getOrDefault(card.getSuit(), 0);
-            if (suitCount == 1) {
-                return card; // Give away singleton
+            if (analysis.getOrDefault(card.getSuit(), 0) == 1) {
+                return card;
             }
         }
 
-        // Give away from least represented suit
-        return chooseSmartCard();
-    }
-
-
-    private Card chooseDefensiveCard() {
-        Map<Card.Suit, Integer> analysis = getHandAnalysis();
-        List<Card> hand = getHand();
-
-        // Try to break up our own concentrations to avoid giving opponents advantage
-        Card.Suit maxSuit = null;
-        int maxCount = 0;
-
-        for (Map.Entry<Card.Suit, Integer> entry : analysis.entrySet()) {
-            if (entry.getValue() > maxCount && entry.getValue() < 4) { // Don't break winning hand
-                maxCount = entry.getValue();
-                maxSuit = entry.getKey();
-            }
-        }
-
-        if (maxSuit != null && maxCount >= 2) {
-            // Give away from most common suit (but not if we have 4)
-            for (Card card : hand) {
-                if (card.getSuit().equals(maxSuit)) {
-                    return card;
-                }
-            }
-        }
-
-        // Fallback to smart choice
+        // Fall back to smart choice
         return chooseSmartCard();
     }
 
@@ -153,8 +119,6 @@ public class BotPlayer extends Player {
                     ") to minimize suit diversity";
             case "AGGRESSIVE" -> "Aggressively giving away " + chosenCard.getSuit() +
                     " singleton to focus collection";
-            case "DEFENSIVE" -> "Defensively playing " + chosenCard.getSuit() +
-                    " to prevent concentration";
             default -> "Random choice: " + chosenCard.getSuit();
         };
 
@@ -186,7 +150,7 @@ public class BotPlayer extends Player {
 
     public void simulateThinking() {
         try {
-            Thread.sleep(500 + random.nextInt(1000)); // 0.5-1.5 seconds
+            Thread.sleep(500 + random.nextInt(1000));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

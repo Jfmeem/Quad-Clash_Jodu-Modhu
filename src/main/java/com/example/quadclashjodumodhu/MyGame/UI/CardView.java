@@ -178,10 +178,7 @@ public class CardView extends StackPane {
         }
     }
 
-    /**
-     * Enable or disable the card for interaction
-     * @param enabled New enabled state
-     */
+
     public void setEnabled(boolean enabled) {
         this.isEnabled = enabled;
         updateVisualState();

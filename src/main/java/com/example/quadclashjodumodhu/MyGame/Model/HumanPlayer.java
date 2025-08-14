@@ -8,7 +8,7 @@ public class HumanPlayer extends Player {
 
     public HumanPlayer(String name) {
         super(name);
-        System.out.println("🧑 Human player initialized: " + name);
+        System.out.println("Human player initialized: " + name);
     }
 
     @Override
@@ -108,9 +108,9 @@ public class HumanPlayer extends Player {
         int suitCount = analysis.getOrDefault(card.getSuit(), 0);
 
         if (suitCount == 4) {
-            System.out.println("⚠ Warning: You're giving away a winning suit!");
+            System.out.println("Warning: You're giving away a winning suit!");
         } else if (suitCount == 3) {
-            System.out.println("⚠ Careful: You have 3 " + card.getSuit() + " cards!");
+            System.out.println("Careful: You have 3 " + card.getSuit() + " cards!");
         } else if (suitCount == 1) {
             System.out.println(" Good choice: Getting rid of singleton " + card.getSuit());
         } else {
