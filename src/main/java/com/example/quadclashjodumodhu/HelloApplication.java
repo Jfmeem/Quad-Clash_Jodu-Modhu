@@ -4,6 +4,7 @@ import com.example.quadclashjodumodhu.MyGame.Core.Game;
 import com.example.quadclashjodumodhu.MyGame.UI.GameBoard;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
@@ -14,6 +15,12 @@ public class HelloApplication extends Application {
 
         Scene scene = new Scene(gameBoard, 800, 600);
         primaryStage.setTitle("Quad Clash: Jodu-Modhu");
+
+        //icon
+        primaryStage.getIcons().add(
+                new Image(getClass().getResourceAsStream("/images/app_icon.png"))
+        );
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

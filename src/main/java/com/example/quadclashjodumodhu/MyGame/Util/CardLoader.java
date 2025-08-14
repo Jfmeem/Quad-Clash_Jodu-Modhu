@@ -131,4 +131,8 @@ private void loadCardBack() {
         }
         return img;
     }
+
+    public Image getCardImage(Card card) {
+        return null;
+    }
 }

@@ -2,8 +2,7 @@ package com.example.quadclashjodumodhu.MyGame.Core;
 
 import com.example.quadclashjodumodhu.MyGame.Model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Game {
     private final List<Player> players = new ArrayList<>();
@@ -11,6 +10,7 @@ public class Game {
     private int currentPlayerIndex = 0;
     private Player winner;
     private int turnCount = 0;
+    private boolean allCardsRevealed = false;
 
     public Game() {
         initializePlayers();
@@ -42,7 +42,6 @@ public class Game {
             }
         }
 
-        // Verify distribution
         System.out.println("Card distribution complete:");
         for (Player player : players) {
             System.out.println(player.getName() + ": " + player.getHandSize() + " cards");
@@ -61,7 +60,6 @@ public class Game {
 
         Card cardToPass = null;
 
-        // Handle card selection based on player type
         if (currentPlayer instanceof HumanPlayer) {
             if (selectedCard != null && currentPlayer.hasCard(selectedCard)) {
                 cardToPass = selectedCard;
@@ -72,38 +70,34 @@ public class Game {
                 return false;
             }
         } else {
-            // AI player chooses card automatically
             cardToPass = currentPlayer.playCard();
             System.out.println("* " + currentPlayer.getName() + " played: " +
                     (cardToPass != null ? cardToPass.getSuit() : "null"));
         }
 
-        // Pass card to next player
         if (cardToPass != null) {
             nextPlayer.addCard(cardToPass);
             System.out.println("➡ " + currentPlayer.getName() + " passed " +
                     cardToPass.getSuit() + " to " + nextPlayer.getName());
 
-            // Show hand sizes after transfer
             System.out.println("After turn: " + currentPlayer.getName() + "(" +
                     currentPlayer.getHandSize() + ") → " +
                     nextPlayer.getName() + "(" + nextPlayer.getHandSize() + ")");
         }
 
-        // Check win condition for all players
         checkWinConditions();
 
         if (winner == null) {
-            // Move to next player's turn
             nextPlayer();
-            return false; // Game continues
+            return false;
         } else {
-            System.out.println("\n GAME OVER! Winner: " + winner.getName() );
+            revealAllCards();
+            System.out.println("\n GAME OVER! Winner: " + winner.getName() +
+                    " with suit: " + getWinnerSuit());
             printFinalStatus();
-            return true; // Game ended
+            return true;
         }
     }
-
 
     private void checkWinConditions() {
         for (Player player : players) {
@@ -119,7 +113,6 @@ public class Game {
             }
         }
     }
-
 
     private void nextPlayer() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -156,7 +149,29 @@ public class Game {
         System.out.println("Total turns played: " + turnCount);
     }
 
-    // Getter methods
+    public void revealAllCards() {
+        allCardsRevealed = true;
+    }
+
+    public boolean isAllCardsRevealed() {
+        return allCardsRevealed;
+    }
+
+    public String getWinnerSuit() {
+        if (winner != null && winner.getHand().size() > 0) {
+            return winner.getHand().get(0).getSuit().toString();
+        }
+        return "Unknown";
+    }
+
+    public Map<String, List<Card>> getAllFinalCards() {
+        Map<String, List<Card>> finalCards = new LinkedHashMap<>();
+        for (Player player : players) {
+            finalCards.put(player.getName(), new ArrayList<>(player.getHand()));
+        }
+        return finalCards;
+    }
+
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }

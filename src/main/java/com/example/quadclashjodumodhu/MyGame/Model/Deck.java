@@ -52,7 +52,7 @@ public class Deck {
 
     public Card drawCard() {
         if (cards.isEmpty()) {
-            System.out.println("⚠ Deck is empty! No more cards to draw.");
+            System.out.println("Deck is empty! No more cards to draw.");
             return null;
         }
 

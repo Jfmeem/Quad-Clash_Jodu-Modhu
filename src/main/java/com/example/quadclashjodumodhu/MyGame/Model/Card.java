@@ -1,13 +1,20 @@
 package com.example.quadclashjodumodhu.MyGame.Model;
 
-
+/**
+ * Card class for Quad Clash: Jodu-Modhu
+ * As per project proposal: 4 types of cards, 4 identical cards per type
+ * Implements proper equals/hashCode for game logic
+ */
 public class Card {
 
-
+    /**
+     * Four card suits as specified in project proposal
+     * Each suit represents a different type of card
+     */
     public enum Suit {
         DEVILQUEEN("Devil Queen", "", "A powerful royal card"),
         EMBERLORE("Ember Lore", "", "Cards of ancient fire magic"),
-        VALORA("Valora", "", "Warrior cards of strength"),
+        VALORA("Valora", "⚔", "Warrior cards of strength"),
         WHISPERSOFWINGS("Whispers of Wings", "", "Mystical wind spirit cards");
 
         private final String displayName;
